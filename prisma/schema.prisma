@@ -8,10 +8,22 @@ datasource db {
 }
 
 model Account {
-  id       String @id @default(uuid()) @db.Uuid
-  email    String @unique
-  password String
-  name     String
+  id            String         @id @default(uuid()) @db.Uuid
+  email         String         @unique
+  password      String
+  name          String
+  refreshTokens RefreshToken[]
 
   @@map("accounts")
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  accountId String   @db.Uuid
+  issuedAt  DateTime @default(now())
+  expiresAt DateTime
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
 }

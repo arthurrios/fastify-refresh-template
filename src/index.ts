@@ -10,17 +10,8 @@ const fastify = Fastify()
 
 fastify.register(FastifyJWT, {
   secret: env.JWT_SECRET,
-  namespace: 'access',
   sign: {
     expiresIn: '10s',
-  },
-})
-
-fastify.register(FastifyJWT, {
-  secret: env.REFRESH_TOKEN_SECRET,
-  namespace: 'refresh',
-  sign: {
-    expiresIn: '10d',
   },
 })
 

@@ -5,7 +5,7 @@ export async function authMiddleware(
   reply: FastifyReply,
 ) {
   try {
-    await request.accessJwtVerify()
+    await request.jwtVerify()
   } catch {
     return reply.code(401).send({ error: 'Invalid credentials' })
   }

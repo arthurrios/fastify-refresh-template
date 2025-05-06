@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { AccountsRepository } from '../repositories/AccountsRepository'
 import { env } from '../config/env'
+import { RefreshTokensRepository } from '../repositories/RefreshTokensRepository'
 
 export class SignInController {
   static schema = z.object({
@@ -32,15 +33,19 @@ export class SignInController {
       return reply.code(400).send({ errors: 'Invalid credentials.' })
     }
 
-    const accessToken = await reply.accessJwtSign({ sub: account.id })
-    const refreshToken = await reply.refreshJwtSign(
-      { sub: account.id },
-      { key: env.REFRESH_TOKEN_SECRET, expiresIn: '10d' },
-    )
+    const accessToken = await reply.jwtSign({ sub: account.id })
 
+    const EXP_TIME_IN_DAYS = 10
+    const expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + EXP_TIME_IN_DAYS)
+
+    const { id } = await RefreshTokensRepository.create({
+      accountId: account.id,
+      expiresAt,
+    })
     return reply.code(200).send({
       accessToken,
-      refreshToken,
+      refreshToken: id,
     })
   }
 }

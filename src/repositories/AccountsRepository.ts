@@ -1,10 +1,10 @@
-import { Account } from '@prisma/client';
-import { prismaClient } from '../lib/prisma';
+import type { Account } from '@prisma/client'
+import { prismaClient } from '../lib/prisma'
 
 interface ICreateDTO {
-  email: string;
-  password: string;
-  name: string;
+  email: string
+  password: string
+  name: string
 }
 
 export class AccountsRepository {
@@ -12,10 +12,10 @@ export class AccountsRepository {
     const account = await prismaClient.account.findUnique({
       where: {
         email,
-      }
-    });
+      },
+    })
 
-    return account;
+    return account
   }
 
   static async create({ email, name, password }: ICreateDTO): Promise<Account> {
@@ -24,7 +24,7 @@ export class AccountsRepository {
         email,
         name,
         password,
-      }
-    });
+      },
+    })
   }
 }
