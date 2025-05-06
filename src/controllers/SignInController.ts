@@ -2,9 +2,7 @@ import { compare } from 'bcryptjs';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
-import { EXP_TIME_IN_DAYS } from '../config/constants';
 import { AccountsRepository } from '../repositories/AccountsRepository';
-import { RefreshTokenRepository } from '../repositories/RefreshTokenRepository';
 
 export class SignInController {
   static schema = z.object({
@@ -41,19 +39,10 @@ export class SignInController {
 
     const accessToken = await reply.jwtSign({ sub: account.id });
 
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + EXP_TIME_IN_DAYS);
-
-    const { id } = await RefreshTokenRepository.create({
-      accountId: account.id,
-      expiresAt,
-    });
-
     return reply
       .code(200)
       .send({
         accessToken,
-        refreshToken: id,
       });
   };
 }
