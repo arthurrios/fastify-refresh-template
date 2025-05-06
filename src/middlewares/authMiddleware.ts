@@ -1,11 +1,12 @@
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { FastifyReply, FastifyRequest } from 'fastify'
 
-export async function authMiddleware(request: FastifyRequest, reply: FastifyReply) {
+export async function authMiddleware(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
   try {
-    await request.jwtVerify();
+    await request.accessJwtVerify()
   } catch {
-    return reply
-      .code(401)
-      .send({ error: 'Invalid credentials' });
+    return reply.code(401).send({ error: 'Invalid credentials' })
   }
 }

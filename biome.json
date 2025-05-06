@@ -1,0 +1,10 @@
+{
+  "extends": ["@arthurrios/biome-config/node"],
+  "linter": {
+    "rules": {
+      "complexity": {
+        "noStaticOnlyClass": "off"
+      }
+    }
+  }
+}
